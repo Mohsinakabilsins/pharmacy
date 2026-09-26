@@ -4,7 +4,7 @@
  * and visits every screen — with ALL outbound network access blocked by the app itself.
  * Screenshots are written to ./test-results/screens.
  *
- *   npm run build && node scripts/e2e-smoke.mjs [--screens]
+ *   npm run build && node scripts/e2e-smoke.mjs [--screens] [--dark] [--exe release/<v>/linux-unpacked/pharmacy-management-system]
  */
 import { _electron as electron } from 'playwright';
 import { mkdtempSync, mkdirSync, rmSync } from 'node:fs';
@@ -18,8 +18,11 @@ mkdirSync(outDir, { recursive: true });
 const userData = mkdtempSync(join(tmpdir(), 'pharmadesk-e2e-'));
 const theme = process.argv.includes('--dark') ? 'dark' : 'light';
 
+// --exe <path> runs against a packaged build instead of ./out
+const exeIdx = process.argv.indexOf('--exe');
+const executablePath = exeIdx > 0 ? resolve(process.argv[exeIdx + 1]) : undefined;
 const app = await electron.launch({
-  args: [root, '--no-sandbox'],
+  ...(executablePath ? { executablePath, args: ['--no-sandbox'] } : { args: [root, '--no-sandbox'] }),
   env: { ...process.env, PHARMADESK_USER_DATA: userData, ELECTRON_DISABLE_SECURITY_WARNINGS: '1' },
 });
 const failures = [];

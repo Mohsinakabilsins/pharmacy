@@ -1,0 +1,62 @@
+# PharmaDesk — Windows installer configuration (electron-builder)
+appId: com.pharmadesk.app
+productName: PharmaDesk
+copyright: Copyright © 2026 PharmaDesk
+directories:
+  output: release/${version}
+  buildResources: build
+
+files:
+  - out/**
+  - resources/**
+  - package.json
+  - "!**/*.map"
+  # better-sqlite3 ships N-API prebuilds for every platform; keep only the ones we can run
+  - "!node_modules/better-sqlite3/{src,deps,docs,benchmark}/**"
+
+# Migrations are applied at startup from resources/drizzle
+extraResources:
+  - from: drizzle
+    to: drizzle
+    filter: ["**/*"]
+
+asar: true
+# fully offline: no auto-update feed
+publish: null
+asarUnpack:
+  - node_modules/better-sqlite3/**
+
+# better-sqlite3 13 uses N-API prebuilds that load in Electron as-is: no native rebuild needed
+npmRebuild: false
+nodeGypRebuild: false
+
+win:
+  icon: build/icon.ico
+  files:
+    - "!node_modules/better-sqlite3/prebuilds/{darwin,linux,linuxmusl}-*.node"
+  target:
+    - target: nsis
+      arch: [x64]
+  artifactName: PharmaDesk-Setup-${version}.${ext}
+  executableName: PharmaDesk
+  requestedExecutionLevel: asInvoker
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowElevation: true
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: always
+  createStartMenuShortcut: true
+  shortcutName: PharmaDesk
+  menuCategory: false
+  runAfterFinish: true
+  # never remove pharmacy data on uninstall — it lives in %APPDATA%\PharmaDesk\data
+  deleteAppDataOnUninstall: false
+  installerIcon: build/icon.ico
+  uninstallerIcon: build/icon.ico
+  license: LICENSE
+
+linux:
+  target: [dir]
+  icon: build/icon.png

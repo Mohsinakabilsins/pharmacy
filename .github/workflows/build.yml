@@ -1,0 +1,44 @@
+name: Build
+
+on:
+  push:
+    branches: [main, 'claude/**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - name: E2E smoke test (offline)
+        run: |
+          sudo apt-get update && sudo apt-get install -y xvfb
+          npx playwright install-deps chromium
+          npm run build
+          xvfb-run -a node scripts/e2e-smoke.mjs
+
+  windows-installer:
+    needs: test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run dist:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PharmaDesk-Windows-Installer
+          path: release/*/PharmaDesk-Setup-*.exe
+          if-no-files-found: error

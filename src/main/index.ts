@@ -11,7 +11,7 @@ import { getSettings, invalidateSettings } from './core/settings';
 import { bootstrapDatabase } from './db/bootstrap';
 import { loadDemoData } from './db/seed';
 import { createHandlers, type MainEnv } from './ipc/handlers';
-import { logout, toSessionInfo } from './modules/auth/auth.service';
+import { loadSessionUser, logout, toSessionInfo } from './modules/auth/auth.service';
 import { backupDue, createBackup, pruneAutoBackups, swapDatabaseFile } from './modules/backup/backup.service';
 import { htmlToPdf, printHtml } from './printing/printer';
 import { hardenSession } from './app/security';
@@ -186,9 +186,20 @@ function registerIpc() {
   sessions.onChange((s) => emit('session.changed', s ? toSessionInfo(systemContext(), s) : null));
 }
 
+/** `electron . --seed-demo` (npm run seed:demo): load sample data into an empty database headlessly, then exit. */
+function seedDemoAndExit() {
+  const admin = handle.sqlite.prepare("SELECT u.id FROM users u JOIN roles r ON r.id = u.role_id WHERE r.name = 'Administrator' ORDER BY u.id LIMIT 1").get() as { id: number } | undefined;
+  const ctx = systemContext();
+  const result = loadDemoData({ ...ctx, user: admin ? loadSessionUser(ctx, admin.id) : null });
+  console.log(`${result.message}\nDatabase: ${dbPath}`);
+  closeDatabase(handle);
+  app.exit(result.loaded ? 0 : 1);
+}
+
 app.whenReady().then(() => {
   try {
     openDb();
+    if (process.argv.includes('--seed-demo')) return seedDemoAndExit();
   } catch (err) {
     dialog.showErrorBox('PharmaDesk could not open its database', `${(err as Error).message}\n\nDatabase: ${dbPath}\n\nRestore a backup or contact support.`);
     app.exit(1);

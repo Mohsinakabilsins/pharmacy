@@ -32,7 +32,7 @@ export class Router {
     private readonly handlers: HandlerMap,
   ) {}
 
-  async dispatch(channel: string, payload: unknown): Promise<IpcResult<unknown>> {
+  async dispatch(channel: string, payload?: unknown): Promise<IpcResult<unknown>> {
     try {
       if (!Object.prototype.hasOwnProperty.call(CHANNELS, channel)) throw new AppError('NOT_FOUND', 'Unknown operation');
       const key = channel as Channel;

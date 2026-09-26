@@ -242,8 +242,8 @@ export function loadDemoData(base: ServiceContext, opts: { days?: number; seed?:
           invoiceDiscount: 0,
           otherCharges: rand() > 0.7 ? 50000 : 0,
           items: items.map((p) => {
-            const packs = Math.max(2, Math.round((p.avgDailyUnits * (18 + rand() * 12)) / p.pack));
-            const monthsToExpiry = opts2.nearExpiry && rand() > 0.6 ? 4 : 10 + Math.floor(rand() * 20);
+            const packs = Math.max(3, Math.round((p.avgDailyUnits * (40 + rand() * 20)) / p.pack));
+            const monthsToExpiry = opts2.nearExpiry && rand() > 0.5 ? 2 : 10 + Math.floor(rand() * 20);
             // stock from the "expired" round expires shortly before the demo period starts
             const exp = opts2.expired ? addDays(start, -40) : addDays(date, monthsToExpiry * 30);
             const [y, m] = exp.split('-').map(Number);
@@ -405,7 +405,7 @@ export function loadDemoData(base: ServiceContext, opts: { days?: number; seed?:
       }
     }
     // replenishment every ~12 days
-    if (d > 0 && d % 12 === 0 && !isToday) purchaseRound(date, 0.45, `R${d}`);
+    if (d > 0 && d % 10 === 0 && !isToday) purchaseRound(date, 0.6, `R${d}`);
     // a damaged write-off now and then
     if (d === 20) {
       setClock(at(date, 18, 0));

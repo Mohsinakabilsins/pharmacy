@@ -1,0 +1,248 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ───────────── Design tokens ───────────── */
+:root {
+  --background: #f5f6f8;
+  --foreground: #0b1220;
+  --card: #ffffff;
+  --card-foreground: #0b1220;
+  --elevated: #ffffff;
+  --muted: #f1f3f6;
+  --muted-foreground: #667085;
+  --subtle: #f8f9fb;
+  --border: #e5e8ed;
+  --border-strong: #d4d9e1;
+  --input: #dfe3e9;
+  --ring: #14b8a6;
+  --primary: #0f766e;
+  --primary-hover: #115e59;
+  --primary-foreground: #ffffff;
+  --primary-soft: #e7f5f2;
+  --primary-soft-foreground: #0f5e57;
+  --sidebar: #fbfbfc;
+  --sidebar-border: #eceef2;
+  --success: #15803d;
+  --success-soft: #eaf7ee;
+  --warning: #b45309;
+  --warning-soft: #fdf3e2;
+  --danger: #c2283a;
+  --danger-soft: #fdecee;
+  --info: #1d63c9;
+  --info-soft: #eaf1fc;
+  --violet: #6d4fd6;
+  --violet-soft: #f1edfd;
+  --chart-1: #0d9488;
+  --chart-2: #eb6834;
+  --chart-3: #2a78d6;
+  --chart-4: #eda100;
+  --chart-5: #e87ba4;
+  --chart-6: #4a3aa7;
+  --chart-grid: #eef0f3;
+  --shadow-color: 220 40% 15%;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0a0e13;
+  --foreground: #e7eaf0;
+  --card: #11161d;
+  --card-foreground: #e7eaf0;
+  --elevated: #161c25;
+  --muted: #19202a;
+  --muted-foreground: #8a94a6;
+  --subtle: #0e131a;
+  --border: #212936;
+  --border-strong: #2c3544;
+  --input: #2a3341;
+  --ring: #2dd4bf;
+  --primary: #14a394;
+  --primary-hover: #19b5a5;
+  --primary-foreground: #ffffff;
+  --primary-soft: #0f2a28;
+  --primary-soft-foreground: #5eead4;
+  --sidebar: #0d1218;
+  --sidebar-border: #1a212b;
+  --success: #34c26b;
+  --success-soft: #11261a;
+  --warning: #f0a93b;
+  --warning-soft: #2a1f0e;
+  --danger: #f06272;
+  --danger-soft: #2c1318;
+  --info: #5a9cf0;
+  --info-soft: #102035;
+  --violet: #a594f5;
+  --violet-soft: #1d1935;
+  --chart-1: #0d9e8c;
+  --chart-2: #d95926;
+  --chart-3: #3987e5;
+  --chart-4: #c98500;
+  --chart-5: #d55181;
+  --chart-6: #9085e9;
+  --chart-grid: #1c232d;
+  --shadow-color: 220 60% 2%;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-elevated: var(--elevated);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-subtle: var(--subtle);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-primary-soft-foreground: var(--primary-soft-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --font-sans: 'Inter Variable', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'Cascadia Code', Consolas, monospace;
+  --shadow-xs: 0 1px 2px hsl(var(--shadow-color) / 0.05);
+  --shadow-card: 0 1px 2px hsl(var(--shadow-color) / 0.04), 0 1px 3px hsl(var(--shadow-color) / 0.05);
+  --shadow-pop: 0 8px 24px -6px hsl(var(--shadow-color) / 0.18), 0 2px 6px hsl(var(--shadow-color) / 0.08);
+  --shadow-dialog: 0 24px 64px -12px hsl(var(--shadow-color) / 0.35), 0 4px 12px hsl(var(--shadow-color) / 0.1);
+  --animate-in: fade-in 140ms ease-out;
+  --animate-pop: pop-in 160ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  --animate-slide: slide-in 200ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.97); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes slide-in {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+
+/* ───────────── Base ───────────── */
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow: hidden;
+    user-select: none;
+  }
+  input,
+  textarea,
+  [contenteditable],
+  .selectable {
+    user-select: text;
+  }
+  * {
+    border-color: var(--border);
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--ring) 28%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  button:focus-visible,
+  a:focus-visible {
+    outline-offset: 1px;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum', 'cv11';
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--muted-foreground) 28%, transparent);
+    border-radius: 999px;
+    border: 3px solid transparent;
+    background-clip: content-box;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: color-mix(in srgb, var(--muted-foreground) 45%, transparent);
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+@utility drag {
+  -webkit-app-region: drag;
+}
+@utility no-drag {
+  -webkit-app-region: no-drag;
+}
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--muted);
+  border-radius: 6px;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--card) 60%, transparent), transparent);
+  animation: shimmer 1.4s infinite;
+}
+
+.bg-grid-fade {
+  background-image: radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--muted-foreground) 18%, transparent) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+
+/* Recharts polish */
+.recharts-cartesian-grid line {
+  stroke: var(--chart-grid);
+}
+.recharts-text {
+  fill: var(--muted-foreground);
+  font-size: 11px;
+}
+.recharts-tooltip-cursor {
+  stroke: var(--border-strong);
+}

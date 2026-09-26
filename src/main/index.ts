@@ -20,6 +20,8 @@ import { applyTitleBarTheme, createMainWindow } from './app/window';
 const PRODUCT_NAME = 'PharmaDesk';
 app.setName(PRODUCT_NAME);
 if (process.env.PHARMADESK_USER_DATA) app.setPath('userData', process.env.PHARMADESK_USER_DATA);
+// Native date pickers follow the Chromium locale; day-first dates match Pakistani usage.
+app.commandLine.appendSwitch('lang', 'en-GB');
 
 // A single instance only: SQLite must be owned by one process.
 if (!app.requestSingleInstanceLock()) {

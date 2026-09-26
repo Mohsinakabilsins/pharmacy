@@ -9,6 +9,27 @@ const alias = {
   '@renderer': resolve(__dirname, 'src/renderer/src'),
 };
 
+/** Strict Content-Security-Policy injected into the production renderer (dev needs inline HMR scripts). */
+const cspPlugin = {
+  name: 'pharmadesk-csp',
+  apply: 'build' as const,
+  transformIndexHtml(html: string) {
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob:",
+      "font-src 'self' data:",
+      "connect-src 'self'",
+      "frame-src 'self' blob: data:",
+      "object-src 'none'",
+      "base-uri 'none'",
+      "form-action 'none'",
+    ].join('; ');
+    return html.replace('<head>', `<head>\n    <meta http-equiv="Content-Security-Policy" content="${csp}" />`);
+  },
+};
+
 export default defineConfig({
   main: {
     resolve: { alias },
@@ -30,7 +51,8 @@ export default defineConfig({
   renderer: {
     root: resolve(__dirname, 'src/renderer'),
     resolve: { alias },
-    plugins: [react(), tailwindcss()],
+    plugins: [react(), tailwindcss(), cspPlugin],
+    base: './',
     build: {
       outDir: 'out/renderer',
       rollupOptions: { input: { index: resolve(__dirname, 'src/renderer/index.html') } },
